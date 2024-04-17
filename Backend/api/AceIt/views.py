@@ -240,11 +240,16 @@ def getFields(request):
 def createExpert(request):
      try:
         POST  = json.loads(request.body)
-
-     
-     except():
+        Expert.objects.get(id = POST['user_id'])
         return JsonResponse({
                'status': 404
+          })
+     except(ObjectDoesNotExist):
+        field = Field.objects.get(id = POST['field'])
+        expert =  Expert.objects.create(id = POST['user_id'],name = POST['name'],rate = POST['rate'],experience = POST['experience'],email = POST['email'],field = field ,about_me = POST['about_me'],linkedIn = POST['url'], profile_picture = POST['profile_picture'], approved = False , rating = 0)
+        expert.save()
+        return JsonResponse({
+               'status': 200
           })
 
      

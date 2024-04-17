@@ -13,7 +13,7 @@ const temp = ref('')
 const row_id = ref()
 const row_count = ref()
 const column_id = ref()
-const columns = ref()
+const columns = ref([])
 const rows = ref()
 const showAddcolumnInput = ref(false)
 const columnText = ref('')
@@ -40,6 +40,8 @@ onMounted(async () => {
              if(jsonResponse.status == 200){
               row_count.value = jsonResponse.row_count
               columns.value = jsonResponse.columns
+              console.log(columns.value)
+              console.log(columns.value.length)
               rows.value = jsonResponse.rows
               table_id.value = jsonResponse.table_id
              }
@@ -161,7 +163,7 @@ async function DeleteRow(row_id){
     <div v-if="table_id" class="overflow-x-auto rounded-lg border border-gray-200">
   <table class="table-auto min-w-full divide-y divide-gray-200 ">
     <thead class="bg-gray-50">
-      <tr>
+      <tr class="overflow-x-scroll">
         <th v-for="col in columns" scope="col" class="thdata align-baseline">{{col.text}}
           <div class="flex flex-row w-6">
             <button @click="DeleteColumn(col.column_id)" class="text-center ml-2 bg-red-400 text-white px-0.5 border border-black rounded">x</button>
@@ -169,7 +171,7 @@ async function DeleteRow(row_id){
           </div>
         </th>
         <th scope="col" class="thdata font-semibold">
-          <div  v-if="!showAddcolumnInput" @click="columnInput()" class="flex flex-row bg-green-200 p-2 rounded border border-gray text-black text-sm justify-between w-3/4 mb-2" >
+          <div  v-if="!showAddcolumnInput" @click="columnInput()" class="flex flex-row bg-green-200 p-2 rounded border border-gray text-black text-sm justify-between w-3/4 mb-2 max-w-32" >
             <button>Add Column</button>
             <img src="../assets/PLus.png" width="25" height="15">
           </div>
@@ -183,21 +185,21 @@ async function DeleteRow(row_id){
       </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
-      <tr v-for="row in row_count" class="odd:bg-white even:bg-slate-100">
+      <tr v-for="row in row_count" class="odd:bg-white even:bg-slate-100 overflow-x-scroll">
         <td v-for="cell in rows[row.row_id]">{{ cell.text}}</td>
         <td class="p-2"><button @click="DeleteRow(row.row_id)" class="bg-red-400 px-2 rounded border border-black font-semibold mx-1">Delete</button><button class="bg-blue-300 px-2 rounded border border-black font-semibold mx-1" @click="setupRowModal(row.row_id,'Edit')">Edit</button></td>
       </tr>
     </tbody>
   </table>
 </div>
-<div class="flex flex-row bg-green-200 font-semibold p-2 rounded border border-gray  justify-between w-1/5 mt-4" @click="setupRowModal(-1,'Add')">
+<div v-if="columns.length" class="flex flex-row bg-green-200 font-semibold p-2 rounded border border-gray  justify-between w-1/5 mt-4" @click="setupRowModal(-1,'Add')">
       <button  class="">Add Row</button>
       <img src="../assets/PLus.png" width="25" height="15">
 </div>
 <RowModal v-if="showRowModal" @closeModal="closeModal" :columns="columns" :row="rows[row_id]" :text="temp"/>
 <ColumnModal v-if="showColumnModal" @closeModal="closeModal" :column="column_id"/>
 <div v-if="!table_id" class="flex flex-row bg-green-300 font-semibold p-2 rounded border border-gray  w-1/4 justify-between">
-  <button v-if="!table_id">CREATE TABLE</button>
+  <button v-if="!table_id ">CREATE TABLE</button>
   <img src="../assets/PLus.png" width="25" height="15">
 </div>
 </template>

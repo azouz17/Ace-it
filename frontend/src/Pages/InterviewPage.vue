@@ -2,8 +2,10 @@
 import Sidebar from '../Components/Sidebar.vue';
 import Header from '../Components/Header.vue'
 import ExpertCard from '../Components/ExpertCard.vue';
-import { ref,onMounted } from 'vue';
+import { ref as ref,onMounted } from 'vue';
 import Cookies from 'js-cookie';
+import Popup from '../Components/Popup.vue'
+import { getStorage, ref as Ref, getDownloadURL } from "firebase/storage";
 
 const Experts = ref([])
 const showpopup = ref(false)
@@ -14,6 +16,8 @@ const field = ref(0)
 const experience = ref(0)
 const filteredExperts = ref([])
 const Fields = ref([])
+const message = ref('Message Sent')
+
 
 onMounted(async () => {
     try{
@@ -31,6 +35,11 @@ onMounted(async () => {
               Experts.value = jsonResponse.experts
               Fields.value = jsonResponse.fields
               filteredExperts.value = Experts.value
+              let i = 0
+              for(i; i<Experts.value.length;i++)
+              {
+                SetUrl(Experts.value[i])
+              }
              }
              console.log(jsonResponse)
          }
@@ -39,10 +48,24 @@ onMounted(async () => {
         console.log(error)
     }
 })
+ async function SetUrl(expert){
+    const storage = getStorage()
+    const ImgRef = Ref(storage, expert.profile_picture)
+    await getDownloadURL(ImgRef)
+  .then((url) => {
+    expert.profile_picture = url
+  })
+  .catch((error) => {
+    // Handle any errors
+  }); 
+ }
 function openPopup(status,closed){
     if(!closed){
         let timeout
         error.value = status
+        if(error.value == true){
+            message.value = "Something went wrong"
+        }
         showpopup.value = true
         timeout = setTimeout(closePopup,5000)
     }
@@ -50,6 +73,7 @@ function openPopup(status,closed){
 function closePopup(){
     showpopup.value = false
     error.value = false
+    message.value = 'Message Sent'
 }
 function resetFilters(){
     experience.value = 0
@@ -75,16 +99,7 @@ function FilterExperts(){
     <div>
       <Header />
       <div class="w-full justify-end flex h-24">
-        <div v-if="showpopup" class="animate-fade w-2/6 ">
-            <div v-if="!error" class="flex flex-col border border-gray rounded-b-lg mr-4 margin-right bg-green-200 self-end">
-                <p class="mt-4 text-lg font-bold">Message Sent</p>
-                <img class="mx-auto" src="../assets/checkmark.png" width="30" height="30">
-            </div> 
-            <div v-if="error" class="flex flex-col border border-gray rounded-b-lg mr-4 margin-right bg-red-400 self-end">
-                <p class="mt-4 text-lg font-bold">Something went wrong </p>
-                <p class="bg-white border border-gray rounded-2xl w-8 font-bold mx-auto">X</p>
-            </div> 
-        </div>
+        <Popup class="w-2/6 " v-if="showpopup" :error="error" :message="message"/>
       </div>
         <div class="flex flex-row -mt-16">
             <Sidebar class="basis-1/4 "/>
@@ -92,7 +107,7 @@ function FilterExperts(){
                 <p class="text-3xl font-bold">Choose Your Expert</p>
                 <p class="font-base mt-2">We have a wide of experts in a variety of fields that will be able to assist you in your job hunt. Take your pick and send them a message to talk about what to do next</p>
                 <div class="flex flex-row mt-4 justify-end p-2">
-                    <button v-if="!showfilters" @click="showfilters = true" class="font-bold mr-2 bg-cyan-200 border border-white rounded px-3 py-1 hover:opacity-70">Filter </Button>
+                    <button v-if="!showfilters" @click="showfilters = true" class="font-bold mr-2 bg-green-200 border border-white rounded px-3 py-1 hover:opacity-70">Filter </Button>
                 </div>
                 <div v-if="showfilters" class="justify-start flex align-baseline">
                     <div class="flex ml-6">
@@ -127,7 +142,7 @@ function FilterExperts(){
                     </div>
                 </div>
                 <div class="flex flex-wrap justify-between mt-4">
-                    <div v-for="expert in filteredExperts"> 
+                    <div :key="expert.email" v-for="expert in filteredExperts"> 
                         <ExpertCard @openPopup="openPopup" :Expert="expert" class=""/>
                     </div>
                 </div>

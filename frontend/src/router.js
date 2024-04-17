@@ -8,7 +8,7 @@ import InterviewPage from './Pages/InterviewPage.vue'
 import ExpertCard from './Components/ExpertCard.vue'
 import ExpertPage from './Pages/ExpertPage.vue';
 import ExpertEnrollment from './Pages/ExpertEnrollment.vue'
-
+import Resume from './Pages/Resume.vue'
 const routes = [
   { path: '/',name: 'Main Page', component: Login, props: true},
   { path: '/signup', component: SignUp, props: true },
@@ -16,6 +16,7 @@ const routes = [
   { path: '/Interview', component: InterviewPage, props: true },
   { path: '/AboutMe',name: 'AboutMe', component: ExpertPage,},
   { path: '/ExpertEnrollment',name: 'Expert Enrollment', component: ExpertEnrollment,},
+  { path: '/Resume',name: 'Resume', component: Resume,},
 ];
 
 const router = createRouter({

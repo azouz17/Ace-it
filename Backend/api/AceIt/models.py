@@ -71,7 +71,7 @@ class Expert(models.Model):
             'rate': self.rate,
             'about_me': self.about_me,
             'experience': self.experience,
-            'profile_picture': 'src/assets/Expert_imgs/'+os.path.basename(self.profile_picture.name),
+            'profile_picture': os.path.basename(self.profile_picture.name),
             'linkedIn': self.linkedIn
         }
 class Field(models.Model):
