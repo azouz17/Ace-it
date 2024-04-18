@@ -58,6 +58,44 @@ onMounted(async () => {
              console.log(error);
          }
 })
+async function CreateTable(){
+  const userStore = useUserStore()
+  try{
+         const response = await fetch(`http://127.0.0.1:8000/createTable`, {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application-json',
+             'X-CSRFToken': Cookies.get('csrftoken'),
+         },
+         credentials: 'include',
+         body: JSON.stringify({
+           id: userStore.getId,
+         }),
+         });
+         if (response.ok) {
+             const jsonResponse = await response.json();
+             if(jsonResponse.status == 200){
+              row_count.value = jsonResponse.row_count
+              columns.value = jsonResponse.columns
+              console.log(columns.value)
+              console.log(columns.value.length)
+              rows.value = jsonResponse.rows
+              table_id.value = jsonResponse.table_id
+             }
+             else{
+             }
+             console.log(jsonResponse)
+         }
+         else{
+             console.error('Request failed!');
+         }
+        
+     }
+         catch(error) {
+             console.log(error);
+         }
+}
+
 function setupRowModal(row_num,text){
   showRowModal.value  = true
   temp.value = text
@@ -186,7 +224,7 @@ async function DeleteRow(row_id){
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
       <tr v-for="row in row_count" class="odd:bg-white even:bg-slate-100 overflow-x-scroll">
-        <td v-for="cell in rows[row.row_id]">{{ cell.text}}</td>
+        <td class="" v-for="cell in rows[row.row_id]">{{ cell.text}}</td>
         <td class="p-2"><button @click="DeleteRow(row.row_id)" class="bg-red-400 px-2 rounded border border-black font-semibold mx-1">Delete</button><button class="bg-blue-300 px-2 rounded border border-black font-semibold mx-1" @click="setupRowModal(row.row_id,'Edit')">Edit</button></td>
       </tr>
     </tbody>
@@ -199,7 +237,7 @@ async function DeleteRow(row_id){
 <RowModal v-if="showRowModal" @closeModal="closeModal" :columns="columns" :row="rows[row_id]" :text="temp"/>
 <ColumnModal v-if="showColumnModal" @closeModal="closeModal" :column="column_id"/>
 <div v-if="!table_id" class="flex flex-row bg-green-300 font-semibold p-2 rounded border border-gray  w-1/4 justify-between">
-  <button v-if="!table_id ">CREATE TABLE</button>
+  <button @click="CreateTable" v-if="!table_id ">CREATE TABLE</button>
   <img src="../assets/PLus.png" width="25" height="15">
 </div>
 </template>

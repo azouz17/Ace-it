@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect, render
 
 
 
@@ -35,12 +37,23 @@ def login(request):
                 'status': 404,
                 'message':'no user found',
                                  })
+def logout(request):
+    print('logged ot user')
+    auth.logout(request)
+    return JsonResponse({
+         'status': 200
+    })   
+
+@csrf_exempt
+def forgotPassword(request):
+      return HttpResponseRedirect('http://127.0.0.1:8000/accounts/password_reset/')
+
 def signup(request):
      try:
         POST = json.loads(request.body)
         temp = User.objects.get(username = POST['email'])
         if temp is None:
-            user = User.objects.create_user(username = POST['email'], first_name = POST['first_name'], last_name = POST['last_name'])
+            user = User.objects.create_user(username = POST['email'], first_name = POST['first_name'], last_name = POST['last_name'], email = POST['email'])
             print(POST['password'])
             user.set_password(POST['password'])
             user.save()
@@ -59,7 +72,7 @@ def signup(request):
                 'message':'user already exixsts',
                                  })
      except(ObjectDoesNotExist):
-            user = User.objects.create_user(username = POST['email'], first_name = POST['first_name'], last_name = POST['last_name'])
+            user = User.objects.create_user(username = POST['email'], first_name = POST['first_name'], last_name = POST['last_name'],email = POST['email'])
             print(POST['password'])
             user.set_password(POST['password'])
             user.save()
@@ -72,6 +85,12 @@ def signup(request):
                 'date_joined': user.date_joined,
                 'id': user.id
             })
+def creatTable(request):
+     POST = json.loads(request.body)
+     user = User.objects.get(id = POST['id'])
+     table = Table.objects.create( user_id = user)
+     table.save()
+     return getTable(request)
 def getTable(request):
      try:
            POST = json.loads(request.body)

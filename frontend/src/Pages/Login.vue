@@ -11,6 +11,28 @@ const router = useRouter()
 const route = useRoute()
 const spinner = ref(false)
 
+async function forgotPassword(){
+  const userStore = useUserStore()
+  try {
+          const response = await fetch(`http://127.0.0.1:8000/forgotPassword`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application-json',
+          },
+          });
+          if (response.ok) {
+              window.location.href = "http://127.0.0.1:8000/accounts/password_reset/";
+              console.log(jsonResponse)
+          }
+          else{
+              console.error('Request failed!');
+          }
+      }
+          catch(error) {
+              console.log(error);
+          }
+}
+
 async function login(){
 
   const userStore = useUserStore()
@@ -61,6 +83,7 @@ async function login(){
       <p class="mb-2">Password:</p>
       <input type="password" class="border border-black rounded p-1" v-model="password">
     </div>
+    <button @click="forgotPassword()" class="underline text-blue-400 italic mt-2">Forgot Password</button>
     <button class="bg-[#99C8C2] w-1/2 rounded p-2 mx-auto mt-4 hover:opacity-70 items-center flex justify-center" @click="login">
         <p>Login</p>
         <img v-if="spinner" src="../assets/spinner.png" width="20" height="20" class="animate-spin ml-2 mt-0.5">

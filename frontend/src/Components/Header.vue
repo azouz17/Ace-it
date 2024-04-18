@@ -1,15 +1,30 @@
 <script setup>
 import router from '../router';
 import { useUserStore } from "../Stores/userStore";
+import Cookies from 'js-cookie';
 
     const userStore = useUserStore()
-
-    function logout() {
-      // Implement your logout logic here
-      console.log("Logged out");
-      router.push('/')
+async function logout (){        
+    try{
+        const response = await fetch('http://127.0.0.1:8000/logout', {
+            method:'POST',
+            headers:{
+                'Content-Type': 'application-json',
+                'X-CSRFToken': Cookies.get('csrftoken'), 
+            } ,
+            credentials: 'include',
+        })
+        if(response.ok){
+          if(response.status == 200)
+            console.log("logged out")
+            //userStore.emptyUser()
+            router.push('/')
+        }
     }
-
+    catch(error){
+        console.log(error)
+    }
+}
 </script>
 <template>
   <div class="w-screen max-w-full  items-center">

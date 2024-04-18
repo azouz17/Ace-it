@@ -10,7 +10,7 @@ import ExpertPage from './Pages/ExpertPage.vue';
 import ExpertEnrollment from './Pages/ExpertEnrollment.vue'
 import Resume from './Pages/Resume.vue'
 const routes = [
-  { path: '/',name: 'Main Page', component: Login, props: true},
+  { path: '/',name: 'Login', component: Login, props: true},
   { path: '/signup', component: SignUp, props: true },
   { path: '/Home', component: MainPage },
   { path: '/Interview', component: InterviewPage, props: true },
