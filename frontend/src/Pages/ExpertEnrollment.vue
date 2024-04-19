@@ -119,7 +119,7 @@ function SetProfileImg(event){
         <Header />
         <div class="flex flex-row mt-4">
             <Sidebar class="basis-1/4" />
-            <div class="basis-3/5 ml-8 mt-8 items-center flex-col relative">
+            <div class="basis-3/5 ml-8 mt-8 items-center self-center flex-col relative">
                 <Popup v-if="showPopup" class=" w-3/6 -mt-12 float-right  absolute top-0 -right-40"  :error="error" :message="message" />
                 <p class="text-3xl font-bold">Become An Expert</p>
                 <p class="font-base mt-8 text-center">
@@ -128,38 +128,38 @@ function SetProfileImg(event){
                     regarding your elegibility
                 </p>
                 <button v-if="!showForm" @click="showForm = true" class="bg-green-200 font-bold w-1/3 rounded p-2 mx-auto mt-8 hover:opacity-70">Sign Up</button>
-                <div v-if="showForm" class="items-center mx-auto border border-slate-300 rounded-lg p-2 mt-6">
-                    <div class="flex flex-col mt-2">
+                <div class=" rounded-lg p-2 mt-6 w-full mx-auto">
+                    <div class="flex flex-col mt-2 bg-white shadow-md rounded-lg p-8 mt-4">
                         <form id="form" :onsubmit="CreateExpert">
                             <div class="flex flex-col">
-                                <label class="font-semibold">Field: </label>
-                                <select required v-model="field" class="w-15 ml-2 border border-black rounded h-6"> 
+                                <label class="inputLabel">Field: </label>
+                                <select required v-model="field" class="inputStyle"> 
                                     <option disabled value="0">Please select one</option> 
                                     <option v-for="field in fields" :value="field.id">{{ field.name }}</option>
                                 </select>
                             </div>
                             <div class="flex flex-col mt-2">
-                                <label class="font-semibold">Rate / hour:</label>
-                                <input required type="number" min="1" v-model="rate" class=" ml-2 border border-black rounded h-6 p-1">
+                                <label class="inputLabel">Rate / hour:</label>
+                                <input required type="number" min="1" v-model="rate" class=" inputStyle">
                             </div>
                             <div class="flex flex-col mt-4">
-                                <label class="font-semibold">Full name:</label>
-                                <input required v-model="name" class=" ml-2 border border-black rounded h-6 p-1">
+                                <label class="inputLabel">Full name:</label>
+                                <input required v-model="name" class=" inputStyle">
                             </div>
                             <div class="flex flex-col mt-4">
-                                <label class="font-semibold">Experience:</label>
-                                <input required type="number" min="0" v-model="experience" class=" ml-2 border border-black rounded h-6 p-1">
+                                <label class="inputLabel">Experience:</label>
+                                <input required type="number" min="0" v-model="experience" class=" inputStyle">
                             </div>
                             <div class="flex flex-col mt-4">
-                                <label class="font-semibold">LinkedIn profile URL:</label>
-                                <input required type="url" v-model="url" class=" ml-2 border border-black rounded h-6 p-1">
+                                <label class="inputLabel">LinkedIn profile URL:</label>
+                                <input required type="url" v-model="url" class=" inputStyle">
                             </div>
                             <div class="flex flex-col mt-4">
-                                <label class="font-semibold">Biography:</label>
-                                <textarea required placeholder="Write a short description about yourself and career and why you want to help others" v-model="about_me" rows="5" cols="70" class=" ml-2 p-1 border border-black rounded " />
+                                <label class="inputLabel">Biography:</label>
+                                <textarea required placeholder="Write a short description about yourself and career and why you want to help others" v-model="about_me" rows="5" cols="70" class=" inputStyle " />
                             </div>
                             <div class="flex mt-4">
-                                <label class="font-semibold">Profile Picture:</label>
+                                <label class="inputLabel">Profile Picture:</label>
                                 <input  @change="SetProfileImg" type="file" accept="image/png, image/jpeg" class=" ml-2 ">
                             </div>
                             <div class="flex">
@@ -168,7 +168,6 @@ function SetProfileImg(event){
                                     <img v-if="spinner" src="../assets/spinner.png" width="20" height="20" class="animate-spin ml-2 mt-0.5">
                                 </button>
                                 <button  @click="showForm = false , error = false" class="bg-green-200 font-bold w-1/3 rounded p-2 mx-auto mt-8 hover:opacity-70 ml-2"> Close</button>
-                                <button @click="tempUpload">Upload</button>
                             </div>
                         </form>
                     </div>

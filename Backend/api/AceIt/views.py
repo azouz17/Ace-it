@@ -85,6 +85,44 @@ def signup(request):
                 'date_joined': user.date_joined,
                 'id': user.id
             })
+def editProfile(request):
+     try:
+          status = 0
+          POST = json.loads(request.body)
+          user = User.objects.get(id = POST['user_id'])
+          if(user.email == POST['email']):
+               user.first_name = POST['first_name']
+               user.last_name = POST['last_name']
+               status = 200
+               user.save()
+          else:
+               old_user = User.objects.get(username = POST['email'])
+               if(User.objects.get(email = POST['email'])):
+                    status = 409
+                    
+          return JsonResponse({
+               'status': status,
+               'first_name': user.first_name,
+               'last_name': user.last_name,
+               'email': user.email,
+               'id': POST['user_id']
+          })
+     except(ObjectDoesNotExist):
+          print('Account not found')
+          user.first_name = POST['first_name']
+          user.last_name = POST['last_name']
+          user.email = POST['email']
+          user.username = POST['email']
+          status = 200
+          user.save()
+          return JsonResponse({
+               'status': status,
+               'first_name': user.first_name,
+               'last_name': user.last_name,
+               'email': user.email,
+               'id': POST['user_id']
+          })
+
 def creatTable(request):
      POST = json.loads(request.body)
      user = User.objects.get(id = POST['id'])

@@ -107,7 +107,7 @@ function FilterExperts(){
                 <p class="text-3xl font-bold">Choose Your Expert</p>
                 <p class="font-base mt-2">We have a wide of experts in a variety of fields that will be able to assist you in your job hunt. Take your pick and send them a message to talk about what to do next</p>
                 <div class="flex flex-row mt-4 justify-end p-2">
-                    <button v-if="!showfilters" @click="showfilters = true" class="font-bold mr-2 bg-green-200 border border-white rounded px-3 py-1 hover:opacity-70">Filter </Button>
+                    <button v-if="!showfilters" @click="showfilters = true" class="buttonStyle mr-2">Filter </Button>
                 </div>
                 <div v-if="showfilters" class="justify-start flex align-baseline">
                     <div class="flex ml-6">

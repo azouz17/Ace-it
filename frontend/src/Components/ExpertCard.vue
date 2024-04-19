@@ -42,8 +42,8 @@ async function AboutMe(){
 </script>
 
 <template>
-    <div class="flex flex-col bg-white w-80 mt-2" >
-        <div class="basis-1/3 border border-gray-400 rounded p-6 items-center ">
+    <div class="flex flex-col bg-white w-80 mt-2 shadow-md" >
+        <div class="basis-1/3 rounded-lg p-6 items-center ">
             <p class="font-bold mb-2">{{ Expert.name }}</p>
             <img id="myimg" class="mx-auto rounded w-28 h-28" v-bind:src="props.Expert.profile_picture" alt="Loading.....">
             <hr class="text-black mt-2">

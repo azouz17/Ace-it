@@ -9,8 +9,10 @@ import ExpertCard from './Components/ExpertCard.vue'
 import ExpertPage from './Pages/ExpertPage.vue';
 import ExpertEnrollment from './Pages/ExpertEnrollment.vue'
 import Resume from './Pages/Resume.vue'
+import EditProfile from './Pages/EditProfile.vue'
 const routes = [
   { path: '/',name: 'Login', component: Login, props: true},
+  { path: '/Edit',name: 'Edit Profile', component: EditProfile, props: true},
   { path: '/signup', component: SignUp, props: true },
   { path: '/Home', component: MainPage },
   { path: '/Interview', component: InterviewPage, props: true },
