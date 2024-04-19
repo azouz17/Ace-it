@@ -5,6 +5,7 @@ import { ref as ref,onMounted, nextTick } from 'vue'
 import Cookies from 'js-cookie';
 import axios from "axios";
 import { useChatStore } from '../stores/ChatStore'
+import { CheckLogin } from '../authentication';
 
 const ChatStore = useChatStore()
 const chat = ref([])
@@ -16,6 +17,7 @@ const reply = ref('')
 async function SendPrompt(e){
     let timeout
     e.preventDefault()
+    CheckLogin()
     chat.value.push(prompt.value)
     loading.value = true
     await nextTick()
@@ -67,7 +69,7 @@ function AddText(){
             <Sidebar class="basis-1/4"/>
             <div class="basis-4/5 ml-8 mt-8 items-center flex-col relative">
                 <p class="text-3xl font-bold">Ask Away!</p>
-                <p class="font-base mt-2">Ask our dedicate AI questions about your resume. You can ask for general advice or tailored advice regarding your own resume</p>
+                <p class="text-lg mt-2">Ask our dedicate AI questions about your resume. You can ask for general advice or tailored advice regarding your own resume</p>
                 <div id="scrollableDiv" class="mt-6 overflow-y-scroll h-3/6 border border-gray rounded-lg p-2 scrollbar">
                     <div v-for="messages in chat" class="mt-6 w-2/5 p-4 rounded-2xl even:bg-blue-200 odd:bg-green-200 text-left">
                         <p class="">{{ messages }}</p>

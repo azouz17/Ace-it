@@ -9,6 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect, render
+from django.conf import settings
 
 
 
@@ -25,7 +26,8 @@ def login(request):
                 'last_name': user.last_name,
                 'email': user.username ,
                 'date_joined': user.date_joined,
-                'id': user.id
+                'id': user.id,
+                'timeout': settings.SESSION_COOKIE_AGE
             })
         else:  
             return JsonResponse({
@@ -64,7 +66,8 @@ def signup(request):
                 'last_name': user.last_name,
                 'email': user.username ,
                 'date_joined': user.date_joined,
-                'id': user.id
+                'id': user.id,
+                'timeout': settings.SESSION_COOKIE_AGE
             })
         else:  
             return JsonResponse({
@@ -85,6 +88,7 @@ def signup(request):
                 'date_joined': user.date_joined,
                 'id': user.id
             })
+@login_required
 def editProfile(request):
      try:
           status = 0
@@ -122,7 +126,8 @@ def editProfile(request):
                'email': user.email,
                'id': POST['user_id']
           })
-
+     
+@login_required
 def creatTable(request):
      POST = json.loads(request.body)
      user = User.objects.get(id = POST['id'])
@@ -158,7 +163,8 @@ def getTable(request):
                 'status':404,
                 'message': 'No table found'
            })
-     
+
+@login_required    
 def modifyrow(request):
       counter = 0
       try:
@@ -186,6 +192,8 @@ def modifyrow(request):
                 'message': 'No table found'
            })
       
+
+@login_required      
 def deleteRow(request):
      try:    
         POST = json.loads(request.body)
@@ -200,6 +208,8 @@ def deleteRow(request):
                 'status':404,
                 'message': 'No Row found'
            })
+     
+@login_required     
 def addColumn(request):
      try:    
         POST = json.loads(request.body)
@@ -217,6 +227,8 @@ def addColumn(request):
                 'status':404,
                 'message': 'Something went wrong'
            })
+     
+@login_required     
 def deleteColumn(request):
      try:    
         POST = json.loads(request.body)
@@ -231,6 +243,8 @@ def deleteColumn(request):
                 'status':404,
                 'message': 'Something went wrong'
            })
+     
+@login_required     
 def EditColumn(request):
      try:    
         POST = json.loads(request.body)
@@ -246,6 +260,8 @@ def EditColumn(request):
                 'status':404,
                 'message': 'Something went wrong'
            })
+     
+@login_required     
 def getExperts(request):
      experts = Expert.objects.filter(approved = True)
      expert_list = []
@@ -260,6 +276,8 @@ def getExperts(request):
         'experts': expert_list,
         'fields': field_list
     })
+
+@login_required
 def sendemail(request):
      POST  = json.loads(request.body)
      try:
@@ -279,6 +297,7 @@ def sendemail(request):
           'status':400,
           })
      
+@login_required     
 def getFields(request):
      try:
           fields = Field.objects.all()
@@ -294,6 +313,7 @@ def getFields(request):
                'status': 404
           })
      
+@login_required     
 def createExpert(request):
      try:
         POST  = json.loads(request.body)

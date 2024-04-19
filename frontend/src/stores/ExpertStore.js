@@ -36,8 +36,15 @@ export const useExpertStore = defineStore('Expert', {
         this.rate = rate
         this.rating = rating
       },
-      temp() {
-        this.Experience = 1
-      },
+      ClearExpert(){
+        this.name = ''
+        this.about_me = ''
+        this.ExpertEmail = ''
+        this.Experience  = 0
+        this.field = ''
+        this.profile_picture = null
+        this.rate = 0
+        this.rating = 0
+      }
     },
   });

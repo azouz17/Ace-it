@@ -8,6 +8,7 @@ import { createRouter } from 'vue-router';
 import $ from "jquery";
 import Popup from '../Components/Popup.vue'
 import { ref as Ref,getStorage,uploadBytes } from "firebase/storage";
+import { CheckLogin } from '../authentication';
 
 const showForm = ref(false)
 const fields = ref([])
@@ -24,6 +25,7 @@ const message = ref('Request Submitted')
 const showPopup = ref(false)
 
 onMounted(async () => {
+    CheckLogin()
     try{
         const response = await fetch(`http://127.0.0.1:8000/getFields`,{
             method:'GET',
@@ -51,6 +53,7 @@ onMounted(async () => {
 
 async function CreateExpert(e){
         e.preventDefault()
+        CheckLogin()
         const userStore = useUserStore()
         const storage = getStorage();
         spinner.value  = true
@@ -122,13 +125,13 @@ function SetProfileImg(event){
             <div class="basis-3/5 ml-8 mt-8 items-center self-center flex-col relative">
                 <Popup v-if="showPopup" class=" w-3/6 -mt-12 float-right  absolute top-0 -right-40"  :error="error" :message="message" />
                 <p class="text-3xl font-bold">Become An Expert</p>
-                <p class="font-base mt-8 text-center">
+                <p class="text-lg mt-8 text-center">
                     Becoming an expert is a great oppurtunity for you to help aspiring individuals in their job hunt. The role would entail assisting them
                     with Interviews, Resume writing and many more. If you think you have the right credentials, sign up here now and we will get back to you
                     regarding your elegibility
                 </p>
                 <button v-if="!showForm" @click="showForm = true" class="bg-green-200 font-bold w-1/3 rounded p-2 mx-auto mt-8 hover:opacity-70">Sign Up</button>
-                <div class=" rounded-lg p-2 mt-6 w-full mx-auto">
+                <div v-if="showForm" class=" rounded-lg p-2 mt-6 w-full mx-auto">
                     <div class="flex flex-col mt-2 bg-white shadow-md rounded-lg p-8 mt-4">
                         <form id="form" :onsubmit="CreateExpert">
                             <div class="flex flex-col">

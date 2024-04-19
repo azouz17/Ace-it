@@ -22,7 +22,6 @@ async function Signup(){
  if(validatefields())
 {
 
-
 try {
   const userStore = useUserStore()
          const response = await fetch(`http://127.0.0.1:8000/signup`, {
@@ -35,7 +34,7 @@ try {
          body: JSON.stringify({
            first_name: Firstname.value,
            last_name: Lastname.value,
-           email: email.value,
+           email: email.value.toLowerCase(),
            password: password.value,
          }),
          });
@@ -44,6 +43,9 @@ try {
              if(jsonResponse.status == 200){
                userStore.setUser(jsonResponse.first_name,jsonResponse.last_name,jsonResponse.email,jsonResponse.id)
                displayerror.value = false
+               const expirationTime = new Date(Date.now() + jsonResponse.timeout*1000); 
+               const expirationUTCString = expirationTime.toUTCString();
+               document.cookie = `session=active; expires=${expirationUTCString}; path=/;`
                router.push('/Home')
              }
              else{

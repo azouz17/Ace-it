@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import Cookies from 'js-cookie';
 import { useUserStore } from "../Stores/userStore";
 import { RouterView,useRouter, useRoute } from 'vue-router'
+import { CheckLogin } from '../authentication';
 
 const props = defineProps(['columns','row','text'])
 const emit = defineEmits(['closeModal'])
@@ -12,11 +13,16 @@ const new_row = ref([])
 const router = useRouter()
 
 onMounted( () => {
-    if(props.row){
-        row_id.value = props.row[0].row_id.row_id
-    }
+    let text
     isModalOpen.value = true
     new_row.value.length = props.columns.length
+    if(props.row){
+        row_id.value = props.row[0].row_id.row_id
+        for(let i = 0; i < props.columns.length; i++){
+            text = props.row.find(cell => cell.column_id.column_id === props.columns[i].column_id).text
+            new_row.value[i] = text
+        }
+    }
 })
 
 function closeModal(){
@@ -26,6 +32,7 @@ function closeModal(){
 
 }
 async function ModifyRow(){
+    CheckLogin()
     const userStore = useUserStore()
     try{
         const response  = await fetch(`http://127.0.0.1:8000/modifyrow`, {
@@ -56,12 +63,6 @@ async function ModifyRow(){
     closeModal()
     router.go()
 }
-function getPlaceholderText(col_id){
-    if(props.row){
-        console.log(col_id)
-        return (props.row.find(cell => cell.column_id.column_id === col_id).text)
-    }
-}
 </script>
 <template>
     <div>
@@ -75,7 +76,7 @@ function getPlaceholderText(col_id){
               <div class="flex flex-col items-start">
                 <div class="flex flex-row mt-4" v-for="(col,index) in columns">
                     <label class="font-bold">{{ col.text }} </label>
-                    <input type="email" :placeholder="getPlaceholderText(col.column_id)" v-model="new_row[index]" class="ml-2 border border-black rounded p-0.5 flex" :id="col.text" >
+                    <input type="email"  v-model="new_row[index]" class="ml-2 border border-black rounded p-0.5 flex" :id="col.text" >
                 </div>
               </div>
       

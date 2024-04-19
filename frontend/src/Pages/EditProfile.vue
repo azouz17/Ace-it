@@ -5,6 +5,7 @@ import { useUserStore } from "../Stores/userStore";
 import { RouterView,useRouter, useRoute } from 'vue-router'
 import Sidebar from '../Components/Sidebar.vue';
 import Header from '../Components/Header.vue'
+import { CheckLogin } from '../authentication';
 
 const user = useUserStore()
 const showform = ref(false)
@@ -15,6 +16,7 @@ const spinner = ref(false)
 const error = ref(false)
 
 async function forgotPassword(){
+  CheckLogin()
   const userStore = useUserStore()
   try {
           const response = await fetch(`http://127.0.0.1:8000/forgotPassword`, {
@@ -37,6 +39,7 @@ async function forgotPassword(){
 
 async function EditProfile(e){
     e.preventDefault()
+    CheckLogin()
     spinner.value = true
     const userStore = useUserStore()
     error.value = false

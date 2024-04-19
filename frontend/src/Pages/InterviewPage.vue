@@ -6,6 +6,7 @@ import { ref as ref,onMounted } from 'vue';
 import Cookies from 'js-cookie';
 import Popup from '../Components/Popup.vue'
 import { getStorage, ref as Ref, getDownloadURL } from "firebase/storage";
+import { CheckLogin } from '../authentication';
 
 const Experts = ref([])
 const showpopup = ref(false)
@@ -20,6 +21,7 @@ const message = ref('Message Sent')
 
 
 onMounted(async () => {
+    CheckLogin()
     try{
         const response = await fetch(`http://127.0.0.1:8000/getExperts`, {
          method: 'GET',
@@ -105,7 +107,7 @@ function FilterExperts(){
             <Sidebar class="basis-1/4 "/>
             <div class="basis-3/5 ml-8 items-center">
                 <p class="text-3xl font-bold">Choose Your Expert</p>
-                <p class="font-base mt-2">We have a wide of experts in a variety of fields that will be able to assist you in your job hunt. Take your pick and send them a message to talk about what to do next</p>
+                <p class="text-lg mt-2">We have a wide of experts in a variety of fields that will be able to assist you in your job hunt. Take your pick and send them a message to talk about what to do next</p>
                 <div class="flex flex-row mt-4 justify-end p-2">
                     <button v-if="!showfilters" @click="showfilters = true" class="buttonStyle mr-2">Filter </Button>
                 </div>

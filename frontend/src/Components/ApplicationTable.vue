@@ -6,6 +6,7 @@ import { ref, onMounted } from 'vue'
 import Cookies from 'js-cookie';
 import { useUserStore } from "../Stores/userStore";
 import { RouterView,useRouter, useRoute } from 'vue-router'
+import { CheckLogin } from '../authentication';
 
 const showRowModal = ref(false)
 const showColumnModal = ref(false)
@@ -22,6 +23,7 @@ const router = useRouter()
 
 
 onMounted(async () => {
+  CheckLogin()
   const userStore = useUserStore()
   try{
          const response = await fetch(`http://127.0.0.1:8000/getTable`, {
@@ -59,6 +61,7 @@ onMounted(async () => {
          }
 })
 async function CreateTable(){
+  CheckLogin()
   const userStore = useUserStore()
   try{
          const response = await fetch(`http://127.0.0.1:8000/createTable`, {
@@ -114,6 +117,7 @@ function columnInput(){
   columnText.value = ''
 }
 async function AddColumn(){
+  CheckLogin()
   const userStore = useUserStore()
     try{
         const response  = await fetch(`http://127.0.0.1:8000/addColumn`, {
@@ -143,6 +147,7 @@ async function AddColumn(){
 }
 
 async function DeleteColumn(col_id){
+  CheckLogin()
   try{
         const response  = await fetch(`http://127.0.0.1:8000/deleteColumn`, {
             method:'POST',
@@ -170,6 +175,7 @@ async function DeleteColumn(col_id){
 }
 
 async function DeleteRow(row_id){
+  CheckLogin()
     try{
         const response  = await fetch(`http://127.0.0.1:8000/deleteRow`, {
             method:'POST',
@@ -236,8 +242,11 @@ async function DeleteRow(row_id){
 </div>
 <RowModal v-if="showRowModal" @closeModal="closeModal" :columns="columns" :row="rows[row_id]" :text="temp"/>
 <ColumnModal v-if="showColumnModal" @closeModal="closeModal" :column="column_id"/>
-<div v-if="!table_id" class="flex flex-row bg-green-300 font-semibold p-2 rounded border border-gray  w-1/4 justify-between">
-  <button @click="CreateTable" v-if="!table_id ">CREATE TABLE</button>
-  <img src="../assets/PLus.png" width="25" height="15">
+<div v-if="!table_id" class="mt-4">
+  <p class="text-lg text-left">Start tracking your job Applications by creating your table below</p>
+  <div class="flex flex-row bg-green-200 font-semibold p-2 rounded border border-gray  w-1/4 justify-between mt-4">
+    <button @click="CreateTable" v-if="!table_id ">CREATE TABLE</button>
+    <img src="../assets/PLus.png" width="25" height="15">
+</div>
 </div>
 </template>

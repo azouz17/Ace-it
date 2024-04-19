@@ -29,6 +29,7 @@ function validatefields(){
  
 }
  async function sendMessage(){
+    CheckLogin()
     if(validatefields()){
         const userStore = useUserStore()
         spinner.value  = true
