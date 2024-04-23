@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -39,8 +39,14 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ace.it.notify@gmail.com'
 EMAIL_HOST_PASSWORD = 'tqpn xdfm xhoy ihvm'
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 
 #tqpn xdfm xhoy ihvm
+
+SESSION_COOKIE_AGE = 600
+
+LOGIN_URL= 'http://127.0.0.1:5173/'
+LOGOUT_REDIRECT_URL = 'http://127.0.0.1:5173/'
 
 # Application definition
 
@@ -72,7 +78,9 @@ ROOT_URLCONF = 'api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

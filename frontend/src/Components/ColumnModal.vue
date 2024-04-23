@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import Cookies from 'js-cookie';
 import { useUserStore } from "../Stores/userStore";
 import { RouterView,useRouter, useRoute } from 'vue-router'
+import { CheckLogin } from '../authentication';
 
 const props = defineProps(['column'])
 const emit = defineEmits(['closeModal'])
@@ -20,6 +21,7 @@ function closeModal(){
     emit('closeModal')
 }
 async function ModifyColumn(){
+    CheckLogin()
     const userStore = useUserStore()
     try{
         const response  = await fetch(`http://127.0.0.1:8000/EditColumn`, {

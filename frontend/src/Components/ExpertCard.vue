@@ -1,15 +1,34 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref as ref, onMounted } from 'vue'
 import ExpertModal from './ExpertModal.vue'
 import Cookies from 'js-cookie';
 import { useUserStore } from "../Stores/userStore";
 import { RouterView,useRouter, useRoute } from 'vue-router'
 import { useExpertStore } from "../Stores/ExpertStore";
+import { getStorage, ref as Ref, getDownloadURL } from "firebase/storage";
 
 const props = defineProps(['Expert'])
 const emit = defineEmits(['openPopup'])
 const router = useRouter()
 const showModal = ref(false)
+const ImgUrl = ref('https://via.placeholder.com/140x100')
+
+// onMounted(async () => {
+//     const storage = getStorage();
+//     const ImgRef = Ref(storage, props.Expert.profile_picture);
+//     await getDownloadURL(ImgRef)
+//   .then((url) => {
+//     // Or inserted into an <img> element
+//     console.log(url)
+//     const img = document.getElementById('myimg');
+//     img.setAttribute('src', url);
+//   })
+//   .catch((error) => {
+//     // Handle any errors
+//   });  
+
+// })
+
 function closeModal(error,closed){
     showModal.value = false
     emit('openPopup',error,closed)
@@ -23,10 +42,10 @@ async function AboutMe(){
 </script>
 
 <template>
-    <div class="flex flex-col bg-white w-80 mt-2" >
-        <div class="basis-1/3 border border-gray-400 rounded p-6 items-center ">
+    <div class="flex flex-col bg-white w-80 mt-2 shadow-md" >
+        <div class="basis-1/3 rounded-lg p-6 items-center ">
             <p class="font-bold mb-2">{{ Expert.name }}</p>
-            <img class="mx-auto rounded w-24 h-24" v-bind:src=" Expert.profile_picture ">
+            <img id="myimg" class="mx-auto rounded w-28 h-28" v-bind:src="props.Expert.profile_picture" alt="Loading.....">
             <hr class="text-black mt-2">
             <div class="flex flex-row mt-2">
                 <p class="font-bold">Field:</p>

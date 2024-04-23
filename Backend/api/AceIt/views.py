@@ -7,23 +7,27 @@ from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect, render
+from django.conf import settings
 
 
 
 def login(request):
     try:
         POST = json.loads(request.body)
-        temp = authenticate(username=POST['username'], password=POST['password'])
-        if temp is not None:
-            user = User.objects.get(username = temp.username)
-            auth.login(request,temp)
+        find_user = authenticate(username=POST['username'], password=POST['password'])
+        if find_user is not None:
+            user = User.objects.get(username = find_user.username)
+            auth.login(request,find_user)
             return JsonResponse({
                 'status': 200,
                 'first_name': user.first_name ,
                 'last_name': user.last_name,
                 'email': user.username ,
                 'date_joined': user.date_joined,
-                'id': user.id
+                'id': user.id,
+                'timeout': settings.SESSION_COOKIE_AGE
             })
         else:  
             return JsonResponse({
@@ -35,12 +39,23 @@ def login(request):
                 'status': 404,
                 'message':'no user found',
                                  })
+def logout(request):
+    print('logged ot user')
+    auth.logout(request)
+    return JsonResponse({
+         'status': 200
+    })   
+
+@csrf_exempt
+def forgotPassword(request):
+      return HttpResponseRedirect('http://127.0.0.1:8000/accounts/password_reset/')
+
 def signup(request):
      try:
         POST = json.loads(request.body)
         temp = User.objects.get(username = POST['email'])
         if temp is None:
-            user = User.objects.create_user(username = POST['email'], first_name = POST['first_name'], last_name = POST['last_name'])
+            user = User.objects.create_user(username = POST['email'], first_name = POST['first_name'], last_name = POST['last_name'], email = POST['email'])
             print(POST['password'])
             user.set_password(POST['password'])
             user.save()
@@ -51,7 +66,8 @@ def signup(request):
                 'last_name': user.last_name,
                 'email': user.username ,
                 'date_joined': user.date_joined,
-                'id': user.id
+                'id': user.id,
+                'timeout': settings.SESSION_COOKIE_AGE
             })
         else:  
             return JsonResponse({
@@ -59,7 +75,7 @@ def signup(request):
                 'message':'user already exixsts',
                                  })
      except(ObjectDoesNotExist):
-            user = User.objects.create_user(username = POST['email'], first_name = POST['first_name'], last_name = POST['last_name'])
+            user = User.objects.create_user(username = POST['email'], first_name = POST['first_name'], last_name = POST['last_name'],email = POST['email'])
             print(POST['password'])
             user.set_password(POST['password'])
             user.save()
@@ -72,6 +88,52 @@ def signup(request):
                 'date_joined': user.date_joined,
                 'id': user.id
             })
+@login_required
+def editProfile(request):
+     try:
+          status = 0
+          POST = json.loads(request.body)
+          user = User.objects.get(id = POST['user_id'])
+          if(user.email == POST['email']):
+               user.first_name = POST['first_name']
+               user.last_name = POST['last_name']
+               status = 200
+               user.save()
+          else:
+               old_user = User.objects.get(username = POST['email'])
+               if(User.objects.get(email = POST['email'])):
+                    status = 409
+                    
+          return JsonResponse({
+               'status': status,
+               'first_name': user.first_name,
+               'last_name': user.last_name,
+               'email': user.email,
+               'id': POST['user_id']
+          })
+     except(ObjectDoesNotExist):
+          print('Account not found')
+          user.first_name = POST['first_name']
+          user.last_name = POST['last_name']
+          user.email = POST['email']
+          user.username = POST['email']
+          status = 200
+          user.save()
+          return JsonResponse({
+               'status': status,
+               'first_name': user.first_name,
+               'last_name': user.last_name,
+               'email': user.email,
+               'id': POST['user_id']
+          })
+     
+@login_required
+def creatTable(request):
+     POST = json.loads(request.body)
+     user = User.objects.get(id = POST['id'])
+     table = Table.objects.create( user_id = user)
+     table.save()
+     return getTable(request)
 def getTable(request):
      try:
            POST = json.loads(request.body)
@@ -101,7 +163,8 @@ def getTable(request):
                 'status':404,
                 'message': 'No table found'
            })
-     
+
+@login_required    
 def modifyrow(request):
       counter = 0
       try:
@@ -129,6 +192,8 @@ def modifyrow(request):
                 'message': 'No table found'
            })
       
+
+@login_required      
 def deleteRow(request):
      try:    
         POST = json.loads(request.body)
@@ -143,6 +208,8 @@ def deleteRow(request):
                 'status':404,
                 'message': 'No Row found'
            })
+     
+@login_required     
 def addColumn(request):
      try:    
         POST = json.loads(request.body)
@@ -160,6 +227,8 @@ def addColumn(request):
                 'status':404,
                 'message': 'Something went wrong'
            })
+     
+@login_required     
 def deleteColumn(request):
      try:    
         POST = json.loads(request.body)
@@ -174,6 +243,8 @@ def deleteColumn(request):
                 'status':404,
                 'message': 'Something went wrong'
            })
+     
+@login_required     
 def EditColumn(request):
      try:    
         POST = json.loads(request.body)
@@ -189,6 +260,8 @@ def EditColumn(request):
                 'status':404,
                 'message': 'Something went wrong'
            })
+     
+@login_required     
 def getExperts(request):
      experts = Expert.objects.filter(approved = True)
      expert_list = []
@@ -203,6 +276,8 @@ def getExperts(request):
         'experts': expert_list,
         'fields': field_list
     })
+
+@login_required
 def sendemail(request):
      POST  = json.loads(request.body)
      try:
@@ -222,29 +297,39 @@ def sendemail(request):
           'status':400,
           })
      
+     
+
+@login_required     
+def createExpert(request):
+     try:
+        POST  = json.loads(request.body)
+        Expert.objects.get(id = POST['user_id'])
+        return JsonResponse({
+               'status': 404
+          })
+     except(ObjectDoesNotExist):
+        field = Field.objects.get(id = POST['field'])
+        expert =  Expert.objects.create(id = POST['user_id'],name = POST['name'],rate = POST['rate'],experience = POST['experience'],email = POST['email'],field = field ,about_me = POST['about_me'],linkedIn = POST['url'], profile_picture = POST['profile_picture'], approved = False , rating = 0)
+        expert.save()
+        return JsonResponse({
+               'status': 200
+          })
+     
+@login_required   
 def getFields(request):
      try:
           fields = Field.objects.all()
           field_list = []
           for field in fields:
                field_list.append(field.to_dict())
+          print(field_list)
           return JsonResponse({
                'status': 200,
                'fields': field_list
           })
-     except():
+     except(ObjectDoesNotExist):
           return JsonResponse({
                'status': 404
-          })
-     
-def createExpert(request):
-     try:
-        POST  = json.loads(request.body)
-
-     
-     except():
-        return JsonResponse({
-               'status': 404
-          })
+          })     
 
      

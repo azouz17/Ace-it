@@ -23,5 +23,11 @@ export const useUserStore = defineStore('user', {
         this.email = email
         this.id = id
       },
+      emptyUser(){
+        this.first_name = ''; 
+        this.last_name = ''
+        this.email = ''
+        this.id = ''
+      }  
     },
   });

@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import Cookies from 'js-cookie';
 import { useUserStore } from "../Stores/userStore";
 import { RouterView,useRouter, useRoute } from 'vue-router'
+import { CheckLogin } from '../authentication';
 
 const emit = defineEmits(['closeModal'])
 const props = defineProps(['Expert'])
@@ -29,6 +30,7 @@ function validatefields(){
  
 }
  async function sendMessage(){
+    CheckLogin()
     if(validatefields()){
         const userStore = useUserStore()
         spinner.value  = true

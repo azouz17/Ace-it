@@ -6,6 +6,7 @@ import { ref, onMounted } from 'vue'
 import Cookies from 'js-cookie';
 import { useUserStore } from "../Stores/userStore";
 import { RouterView,useRouter, useRoute } from 'vue-router'
+import { CheckLogin } from '../authentication';
 
 const showRowModal = ref(false)
 const showColumnModal = ref(false)
@@ -13,7 +14,7 @@ const temp = ref('')
 const row_id = ref()
 const row_count = ref()
 const column_id = ref()
-const columns = ref()
+const columns = ref([])
 const rows = ref()
 const showAddcolumnInput = ref(false)
 const columnText = ref('')
@@ -22,6 +23,7 @@ const router = useRouter()
 
 
 onMounted(async () => {
+  CheckLogin()
   const userStore = useUserStore()
   try{
          const response = await fetch(`http://127.0.0.1:8000/getTable`, {
@@ -40,6 +42,8 @@ onMounted(async () => {
              if(jsonResponse.status == 200){
               row_count.value = jsonResponse.row_count
               columns.value = jsonResponse.columns
+              console.log(columns.value)
+              console.log(columns.value.length)
               rows.value = jsonResponse.rows
               table_id.value = jsonResponse.table_id
              }
@@ -56,6 +60,45 @@ onMounted(async () => {
              console.log(error);
          }
 })
+async function CreateTable(){
+  CheckLogin()
+  const userStore = useUserStore()
+  try{
+         const response = await fetch(`http://127.0.0.1:8000/createTable`, {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application-json',
+             'X-CSRFToken': Cookies.get('csrftoken'),
+         },
+         credentials: 'include',
+         body: JSON.stringify({
+           id: userStore.getId,
+         }),
+         });
+         if (response.ok) {
+             const jsonResponse = await response.json();
+             if(jsonResponse.status == 200){
+              row_count.value = jsonResponse.row_count
+              columns.value = jsonResponse.columns
+              console.log(columns.value)
+              console.log(columns.value.length)
+              rows.value = jsonResponse.rows
+              table_id.value = jsonResponse.table_id
+             }
+             else{
+             }
+             console.log(jsonResponse)
+         }
+         else{
+             console.error('Request failed!');
+         }
+        
+     }
+         catch(error) {
+             console.log(error);
+         }
+}
+
 function setupRowModal(row_num,text){
   showRowModal.value  = true
   temp.value = text
@@ -74,6 +117,7 @@ function columnInput(){
   columnText.value = ''
 }
 async function AddColumn(){
+  CheckLogin()
   const userStore = useUserStore()
     try{
         const response  = await fetch(`http://127.0.0.1:8000/addColumn`, {
@@ -103,6 +147,7 @@ async function AddColumn(){
 }
 
 async function DeleteColumn(col_id){
+  CheckLogin()
   try{
         const response  = await fetch(`http://127.0.0.1:8000/deleteColumn`, {
             method:'POST',
@@ -130,6 +175,7 @@ async function DeleteColumn(col_id){
 }
 
 async function DeleteRow(row_id){
+  CheckLogin()
     try{
         const response  = await fetch(`http://127.0.0.1:8000/deleteRow`, {
             method:'POST',
@@ -159,17 +205,17 @@ async function DeleteRow(row_id){
 
 <template>
     <div v-if="table_id" class="overflow-x-auto rounded-lg border border-gray-200">
-  <table class="table-auto min-w-full divide-y divide-gray-200 ">
+  <table class="table-auto min-w-full divide-y divide-gray-200 overflow-x-scroll scrollbar">
     <thead class="bg-gray-50">
-      <tr>
-        <th v-for="col in columns" scope="col" class="thdata align-baseline">{{col.text}}
+      <tr class="">
+        <th v-for="col in columns" scope="col" class="thdata align-baseline min-w-16 ">{{col.text}}
           <div class="flex flex-row w-6">
             <button @click="DeleteColumn(col.column_id)" class="text-center ml-2 bg-red-400 text-white px-0.5 border border-black rounded">x</button>
             <button @click="setupColumnModal(col)" class="text-center ml-2 text-black px-0.5 border border-black rounded">E</button>
           </div>
         </th>
         <th scope="col" class="thdata font-semibold">
-          <div  v-if="!showAddcolumnInput" @click="columnInput()" class="flex flex-row bg-green-200 p-2 rounded border border-gray text-black text-sm justify-between w-3/4 mb-2" >
+          <div  v-if="!showAddcolumnInput" @click="columnInput()" class="flex flex-row bg-green-200 p-2 rounded border border-gray text-black text-sm justify-between w-3/4 mb-2 max-w-32" >
             <button>Add Column</button>
             <img src="../assets/PLus.png" width="25" height="15">
           </div>
@@ -183,21 +229,24 @@ async function DeleteRow(row_id){
       </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
-      <tr v-for="row in row_count" class="odd:bg-white even:bg-slate-100">
-        <td v-for="cell in rows[row.row_id]">{{ cell.text}}</td>
+      <tr v-for="row in row_count" class="odd:bg-white even:bg-slate-100 overflow-x-scroll">
+        <td class="" v-for="cell in rows[row.row_id]">{{ cell.text}}</td>
         <td class="p-2"><button @click="DeleteRow(row.row_id)" class="bg-red-400 px-2 rounded border border-black font-semibold mx-1">Delete</button><button class="bg-blue-300 px-2 rounded border border-black font-semibold mx-1" @click="setupRowModal(row.row_id,'Edit')">Edit</button></td>
       </tr>
     </tbody>
   </table>
 </div>
-<div class="flex flex-row bg-green-200 font-semibold p-2 rounded border border-gray  justify-between w-1/5 mt-4" @click="setupRowModal(-1,'Add')">
+<div v-if="columns.length" class="flex flex-row bg-green-200 font-semibold p-2 rounded border border-gray  justify-between w-1/5 mt-4" @click="setupRowModal(-1,'Add')">
       <button  class="">Add Row</button>
       <img src="../assets/PLus.png" width="25" height="15">
 </div>
 <RowModal v-if="showRowModal" @closeModal="closeModal" :columns="columns" :row="rows[row_id]" :text="temp"/>
 <ColumnModal v-if="showColumnModal" @closeModal="closeModal" :column="column_id"/>
-<div v-if="!table_id" class="flex flex-row bg-green-300 font-semibold p-2 rounded border border-gray  w-1/4 justify-between">
-  <button v-if="!table_id">CREATE TABLE</button>
-  <img src="../assets/PLus.png" width="25" height="15">
+<div v-if="!table_id" class="mt-4">
+  <p class="text-lg text-left">Start tracking your job Applications by creating your table below</p>
+  <div class="flex flex-row bg-green-200 font-semibold p-2 rounded border border-gray  w-1/4 justify-between mt-4">
+    <button @click="CreateTable" v-if="!table_id ">CREATE TABLE</button>
+    <img src="../assets/PLus.png" width="25" height="15">
+</div>
 </div>
 </template>

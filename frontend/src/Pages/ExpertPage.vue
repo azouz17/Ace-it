@@ -6,6 +6,7 @@ import Sidebar from '../Components/Sidebar.vue'
 import { RouterView,useRouter, useRoute } from 'vue-router'
 import { useExpertStore } from "../Stores/ExpertStore";
 import ExpertModal from '../Components/ExpertModal.vue'
+import Popup from '../Components/Popup.vue'
 
 const ExpertStore = useExpertStore()
 const rating = parseInt(ExpertStore.rating)
@@ -16,6 +17,7 @@ const Expert = {
     name: ExpertStore.name,
     email: ExpertStore.ExpertEmail
 }
+const message = ref('Message Sent')
 
 function closeModal(error,closed){
     showModal.value = false
@@ -24,14 +26,20 @@ function closeModal(error,closed){
     }
 }
 function openPopup(status,closed){
+    if(!closed){
         let timeout
         error.value = status
+        if(error.value == true){
+            message.value = "Something went wrong"
+        }
         showpopup.value = true
         timeout = setTimeout(closePopup,5000)
+    }
 }
 function closePopup(){
     showpopup.value = false
     error.value = false
+    message.value = 'Message Sent'
 }
 
 </script>
@@ -39,22 +47,11 @@ function closePopup(){
 <template>
     <div>
         <Header />
-        <div class="w-full justify-end flex h-24">
-        <div v-if="showpopup" class="animate-fade w-2/6 ">
-            <div v-if="!error" class="flex flex-col border border-gray rounded-b-lg mr-4 margin-right bg-green-200 self-end">
-                <p class="mt-4 text-lg font-bold">Message Sent</p>
-                <img class="mx-auto" src="../assets/checkmark.png" width="30" height="30">
-            </div> 
-            <div v-if="error" class="flex flex-col border border-gray rounded-b-lg mr-4 margin-right bg-red-400 self-end">
-                <p class="mt-4 text-lg font-bold">Something went wrong </p>
-                <p class="bg-white border border-gray rounded-2xl w-8 font-bold mx-auto">X</p>
-            </div> 
-        </div>
-      </div>
-        <div class="flex flex-row -mt-10">
+        <div class="flex flex-row ">
             <Sidebar class="basis-1/4 mt-4"/>
-            <div class="basis-3/5 ml-8 flex flex-col  mt-10">
-                <router-link class="font-bold text-blue-600 underline hover:text-blue-300 text-left w-12" to="/Interview">Back</router-link>
+            <div class="basis-3/5 ml-8 flex flex-col relative mt-10">
+                <Popup v-if="showpopup" class=" w-3/6 float-right absolute top-0 -mt-10 -right-40"  :error="error" :message="message" />
+                <router-link class="font-bold text-blue-600 underline hover:text-blue-300 text-left w-12" to="/ExpertHelp">Back</router-link>
                 <p class="font-bold text-3xl">{{ExpertStore.name}}</p>
                 <img v-bind:src=" ExpertStore.profile_picture" width="200" height="100" class="border border-gray-300 rounded mx-auto mt-10">
                 <div class="flex w-2/5 flex-wrap mx-auto">
