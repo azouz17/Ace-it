@@ -17,7 +17,7 @@ const Expert = {
     name: ExpertStore.name,
     email: ExpertStore.ExpertEmail
 }
-const message = ref('Request Submitted')
+const message = ref('Message Sent')
 
 function closeModal(error,closed){
     showModal.value = false
@@ -51,7 +51,7 @@ function closePopup(){
             <Sidebar class="basis-1/4 mt-4"/>
             <div class="basis-3/5 ml-8 flex flex-col relative mt-10">
                 <Popup v-if="showpopup" class=" w-3/6 float-right absolute top-0 -mt-10 -right-40"  :error="error" :message="message" />
-                <router-link class="font-bold text-blue-600 underline hover:text-blue-300 text-left w-12" to="/Interview">Back</router-link>
+                <router-link class="font-bold text-blue-600 underline hover:text-blue-300 text-left w-12" to="/ExpertHelp">Back</router-link>
                 <p class="font-bold text-3xl">{{ExpertStore.name}}</p>
                 <img v-bind:src=" ExpertStore.profile_picture" width="200" height="100" class="border border-gray-300 rounded mx-auto mt-10">
                 <div class="flex w-2/5 flex-wrap mx-auto">

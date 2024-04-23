@@ -118,7 +118,7 @@ async function login(){
         <img v-if="spinner" src="../assets/spinner.png" width="20" height="20" class="animate-spin ml-2 mt-0.5">
     </button>
     <p> Dont have an Account ?</p>
-    <router-link to="/signup">
+    <router-link class="underline" to="/signup">
           Sign Up
     </router-link>
   </div>

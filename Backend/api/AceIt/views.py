@@ -16,10 +16,10 @@ from django.conf import settings
 def login(request):
     try:
         POST = json.loads(request.body)
-        temp = authenticate(username=POST['username'], password=POST['password'])
-        if temp is not None:
-            user = User.objects.get(username = temp.username)
-            auth.login(request,temp)
+        find_user = authenticate(username=POST['username'], password=POST['password'])
+        if find_user is not None:
+            user = User.objects.get(username = find_user.username)
+            auth.login(request,find_user)
             return JsonResponse({
                 'status': 200,
                 'first_name': user.first_name ,
@@ -297,22 +297,8 @@ def sendemail(request):
           'status':400,
           })
      
-@login_required     
-def getFields(request):
-     try:
-          fields = Field.objects.all()
-          field_list = []
-          for field in fields:
-               field_list.append(field.to_dict())
-          return JsonResponse({
-               'status': 200,
-               'fields': field_list
-          })
-     except():
-          return JsonResponse({
-               'status': 404
-          })
      
+
 @login_required     
 def createExpert(request):
      try:
@@ -328,5 +314,22 @@ def createExpert(request):
         return JsonResponse({
                'status': 200
           })
+     
+@login_required   
+def getFields(request):
+     try:
+          fields = Field.objects.all()
+          field_list = []
+          for field in fields:
+               field_list.append(field.to_dict())
+          print(field_list)
+          return JsonResponse({
+               'status': 200,
+               'fields': field_list
+          })
+     except(ObjectDoesNotExist):
+          return JsonResponse({
+               'status': 404
+          })     
 
      

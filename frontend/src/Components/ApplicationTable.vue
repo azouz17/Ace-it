@@ -205,10 +205,10 @@ async function DeleteRow(row_id){
 
 <template>
     <div v-if="table_id" class="overflow-x-auto rounded-lg border border-gray-200">
-  <table class="table-auto min-w-full divide-y divide-gray-200 ">
+  <table class="table-auto min-w-full divide-y divide-gray-200 overflow-x-scroll scrollbar">
     <thead class="bg-gray-50">
-      <tr class="overflow-x-scroll">
-        <th v-for="col in columns" scope="col" class="thdata align-baseline">{{col.text}}
+      <tr class="">
+        <th v-for="col in columns" scope="col" class="thdata align-baseline min-w-16 ">{{col.text}}
           <div class="flex flex-row w-6">
             <button @click="DeleteColumn(col.column_id)" class="text-center ml-2 bg-red-400 text-white px-0.5 border border-black rounded">x</button>
             <button @click="setupColumnModal(col)" class="text-center ml-2 text-black px-0.5 border border-black rounded">E</button>

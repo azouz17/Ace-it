@@ -89,7 +89,6 @@ function FilterExperts(){
     else{
         filteredExperts.value = Experts.value.filter((expert) => expert.experience >= experience.value && expert.rate >= rate.value ) 
         if(field.value != 0 ){
-            console.log(field.value)
             filteredExperts.value = filteredExperts.value.filter((expert)=> expert.field.id == field.value)
         }
     }

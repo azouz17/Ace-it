@@ -70,7 +70,7 @@ function AddText(){
             <div class="basis-4/5 ml-8 mt-8 items-center flex-col relative">
                 <p class="text-3xl font-bold">Ask Away!</p>
                 <p class="text-lg mt-2">Ask our dedicate AI questions about your resume. You can ask for general advice or tailored advice regarding your own resume</p>
-                <div id="scrollableDiv" class="mt-6 overflow-y-scroll h-3/6 border border-gray rounded-lg p-2 scrollbar">
+                <div id="scrollableDiv" class="mt-6 overflow-y-scroll h-3/6 border border-gray rounded-lg p-2 scrollbar max-h-96">
                     <div v-for="messages in chat" class="mt-6 w-2/5 p-4 rounded-2xl even:bg-blue-200 odd:bg-green-200 text-left">
                         <p class="">{{ messages }}</p>
                     </div>

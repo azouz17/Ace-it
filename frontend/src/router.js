@@ -18,7 +18,7 @@ const routes = [
   { path: '/Edit',name: 'Edit Profile', component: EditProfile, props: true},
   { path: '/signup', name: "Signup", component: SignUp, props: true },
   { path: '/Home', component: MainPage },
-  { path: '/Interview', component: InterviewPage, props: true },
+  { path: '/ExpertHelp', component: InterviewPage, props: true },
   { path: '/AboutMe',name: 'AboutMe', component: ExpertPage,},
   { path: '/ExpertEnrollment',name: 'Expert Enrollment', component: ExpertEnrollment,},
   { path: '/Resume',name: 'Resume', component: Resume,},

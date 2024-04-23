@@ -33,7 +33,7 @@ onMounted(async () => {
                 'Content-Type': 'application-json',
                 'X-CSRFToken': Cookies.get('csrftoken'),
             },
-            credentails: 'include'
+            credentials: 'include'
         })
         if(response.ok){
             const jsonResponse = await response.json();
