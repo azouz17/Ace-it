@@ -18,9 +18,12 @@ async function Logout (){
   <div class="w-screen max-w-full  items-center">
     <div class="bg-[#111010]  p-4 flex items-center w-full rounded-lg">
       <button @click="Logout" class="bg-white rounded font-bold p-2 hover:opacity-70">Logout</button>
-      <div class="text-white text-2xl font-bold mx-auto">Ace-It!</div>
+      <div class="text-white text-2xl font-bold mx-auto flex align-baseline">
+        <img class="mr-2 h-6 mt-1" src="../assets/AceHeader.png" width="30">
+        <p>Ace-It</p>
+      </div>
       <div class="flex items-baseline space-x-4">
-        <button @click="router.push('/Edit')" class="bg-white rounded font-bold p-2 hover:opacity-70">Edit</button>
+        <button @click="router.push('/Edit')" class="bg-white rounded font-bold p-2 hover:opacity-70">Profile</button>
         <div class="text-white">Welcome, {{ userStore.first_name }}</div>
       </div>
     </div>

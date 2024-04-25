@@ -11,7 +11,6 @@ import { CheckLogin } from '../authentication';
 const Experts = ref([])
 const showpopup = ref(false)
 const error = ref(false)
-const showfilters = ref(false)
 const rate = ref(0)
 const field = ref(0)
 const experience = ref(0)
@@ -92,7 +91,6 @@ function FilterExperts(){
             filteredExperts.value = filteredExperts.value.filter((expert)=> expert.field.id == field.value)
         }
     }
-    showfilters.value = false
 }
 </script>
 
@@ -107,10 +105,7 @@ function FilterExperts(){
             <div class="basis-3/5 ml-8 items-center">
                 <p class="text-3xl font-bold">Choose Your Expert</p>
                 <p class="text-lg mt-2">We have a wide of experts in a variety of fields that will be able to assist you in your job hunt. Take your pick and send them a message to talk about what to do next</p>
-                <div class="flex flex-row mt-4 justify-end p-2">
-                    <button v-if="!showfilters" @click="showfilters = true" class="buttonStyle mr-2">Filter </Button>
-                </div>
-                <div v-if="showfilters" class="justify-start flex align-baseline">
+                <div class="justify-start flex align-baseline mt-4">
                     <div class="flex ml-6">
                         <label class="font-semibold" >Rate:</label>
                         <select v-model="rate" class="w-12 ml-2 border border-black rounded h-6">
@@ -138,8 +133,8 @@ function FilterExperts(){
                         </select>
                     </div>
                     <div class="ml-8">
-                        <button @click="FilterExperts" class="font-semibold mr-2 bg-cyan-100 border border-white rounded px-3 py-1 hover:opacity-70 ml-2 h-8">Filter </Button>
-                        <button @click="resetFilters" class="font-semibold mr-2 bg-gray-200 border border-white rounded px-3 py-1 hover:opacity-70 ml-2">Clear</Button>
+                        <button @click="FilterExperts" class="font-semibold mr-2 bg-slate-200 border border-white rounded px-3 py-1 hover:opacity-70 ml-2 h-8">Filter </Button>
+                        <button @click="resetFilters" class="font-semibold mr-2 bg-slate-200 border border-white rounded px-3 py-1 hover:opacity-70 ml-2">Clear</Button>
                     </div>
                 </div>
                 <div class="flex flex-wrap justify-between mt-4">

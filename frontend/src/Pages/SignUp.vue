@@ -86,7 +86,7 @@ else{
       <p class="mb-2">Email:</p>
       <input v-model="email" type="email" class="border border-black rounded p-1">
     </div>
-    <button class="bg-[#99C8C2] w-1/2 rounded p-2 mx-auto mt-4 hover:opacity-70" @click="Signup">
+    <button class="bg-[#99C8C2] w-1/2 rounded p-2 mx-auto mt-4 hover:opacity-70 items-center flex justify-center" @click="Signup">
         <p>Sign up</p>
         <img v-if="spinner" src="../assets/spinner.png" width="20" height="20" class="animate-spin ml-2 mt-0.5">
     </button>
