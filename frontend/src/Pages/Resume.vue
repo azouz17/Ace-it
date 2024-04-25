@@ -47,7 +47,7 @@ async function SendPrompt(e){
         console.error(error);
     });
     prompt.value=''
-    timeout = setTimeout(AddText,7000,)
+    timeout = setTimeout(AddText,5000,)
 }
 
 function scrollToBottom() {
@@ -67,10 +67,10 @@ function AddText(){
         <Header />
         <div class="flex flex-row mt-4">
             <Sidebar class="basis-1/4"/>
-            <div class="basis-4/5 ml-8 mt-8 items-center flex-col relative">
+            <div class="basis-4/5 ml-8 mt-4 items-center flex-col relative">
                 <p class="text-3xl font-bold">Ask Away!</p>
-                <p class="text-lg mt-2">Ask our dedicate AI questions about your resume. You can ask for general advice or tailored advice regarding your own resume</p>
-                <div id="scrollableDiv" class="mt-6 overflow-y-scroll h-3/6 border border-gray rounded-lg p-2 scrollbar max-h-96">
+                <p class="text-lg mt-2">Ask our dedicated AI assistant questions about your resume. You can ask for general advice or tailored advice regarding your own resume</p>
+                <div id="scrollableDiv" class="mt-6 overflow-y-scroll h-3/6 border border-gray rounded-lg p-2 scrollbar max-h-96 bg-white">
                     <div v-for="messages in chat" class="mt-6 w-2/5 p-4 rounded-2xl even:bg-blue-200 odd:bg-green-200 text-left">
                         <p class="">{{ messages }}</p>
                     </div>

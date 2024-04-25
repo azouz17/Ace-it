@@ -5,12 +5,13 @@ import Header from '../Components/Header.vue'
 import { ref } from 'vue'
 import Cookies from 'js-cookie';
 import { useUserStore } from "../Stores/userStore";
+import Footer from '../Components/Footer.vue'
 
 const userStore = useUserStore()
 console.log(userStore.email,userStore.first_name, userStore.last_name, userStore.id)
 </script>
 <template>
-    <div>
+    <div class="">
       <Header />
       <div class="flex flex-row mt-4">
         <Sidebar class="basis-1/4 "/>
@@ -18,6 +19,5 @@ console.log(userStore.email,userStore.first_name, userStore.last_name, userStore
           <ApplicationTable class=""/>
         </div>
       </div>
-
     </div>
 </template>

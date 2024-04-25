@@ -15,10 +15,8 @@ const spinner = ref(false)
 const AuthStore = useAuthStore()
 
 onMounted( async()=>{  
-    const userStore = useUserStore()
-    console.log(Cookies.get('csrftoken'))
     Cookies.remove('session') 
-    logout('')    
+    logout(AuthStore.logoutMessage)    
 })
 
 async function forgotPassword(){
