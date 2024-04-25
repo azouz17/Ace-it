@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue'
 import Cookies from 'js-cookie';
 import { useUserStore } from "../Stores/userStore";
 import { useAuthStore } from '../stores/authStore';
+import { logout } from '../authentication.js'
 
 const username = ref('')
 const password = ref('')
@@ -13,30 +14,14 @@ const route = useRoute()
 const spinner = ref(false)
 const AuthStore = useAuthStore()
 
-onMounted( async()=>{        
-    try{
-        const response = await fetch('http://127.0.0.1:8000/logout', {
-            method:'POST',
-            headers:{
-                'Content-Type': 'application-json',
-                'X-CSRFToken': Cookies.get('csrftoken'), 
-            } ,
-            credentials: 'include',
-        })
-        if(response.ok){
-          if(response.status == 200)
-            console.log("logged out")
-            //userStore.emptyUser()
-            router.push('/')
-        }
-    }
-    catch(error){
-        console.log(error)
-    }
+onMounted( async()=>{  
+    const userStore = useUserStore()
+    console.log(Cookies.get('csrftoken'))
+    Cookies.remove('session') 
+    logout('')    
 })
 
 async function forgotPassword(){
-  const userStore = useUserStore()
   try {
           const response = await fetch(`http://127.0.0.1:8000/forgotPassword`, {
           method: 'POST',
