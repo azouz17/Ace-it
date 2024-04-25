@@ -10,6 +10,7 @@ const Lastname = ref('')
 const password = ref('')
 const email = ref('')
 const displayerror = ref(false)
+const spinner = ref(false)
 const router = useRouter()
 const route = useRoute()
 
@@ -21,7 +22,7 @@ function validatefields(){
 async function Signup(){
  if(validatefields())
 {
-
+  spinner.value  = true
 try {
   const userStore = useUserStore()
          const response = await fetch(`http://127.0.0.1:8000/signup`, {
@@ -61,7 +62,7 @@ try {
          catch(error) {
              console.log(error);
          }
-
+         spinner.value  = false
 }
 else{
   displayerror.value = true
@@ -72,8 +73,8 @@ else{
 </script>
 
 <template>
-  <div class="w-64">
-    <p class="text-3xl mb-4">SignUp</p>
+  <div class="w-64 mt-24">
+    <p class="text-3xl mb-4">Sign Up</p>
     <p v-if="displayerror" class="text-red-500 p-2 mt-4 font-bold italic">{{ error }}</p>
     <div class="flex flex-col bg-white p-4 rounded border border-grey text-left">
       <p class="mb-2">First Name:</p>
@@ -86,7 +87,8 @@ else{
       <input v-model="email" type="email" class="border border-black rounded p-1">
     </div>
     <button class="bg-[#99C8C2] w-1/2 rounded p-2 mx-auto mt-4 hover:opacity-70" @click="Signup">
-        Signup
+        <p>Sign up</p>
+        <img v-if="spinner" src="../assets/spinner.png" width="20" height="20" class="animate-spin ml-2 mt-0.5">
     </button>
     <router-view></router-view>
   </div>
