@@ -211,7 +211,7 @@ async function DeleteRow(row_id){
         <th v-for="col in columns" scope="col" class="thdata align-baseline min-w-16 text-center text-lg">{{col.text}}
           <div class="flex flex-row w-6 justify-center w-full">
             <button @click="DeleteColumn(col.column_id)" class="text-center  text-black px-0.5 text-sm"><img src="../assets/Delete.png" width="12" height="12"></button>
-            <button @click="setupColumnModal(col)" class="text-center text-black px-0.5 tex-sm"><img src="../assets/Edit.png" width="12" height="12"></button>
+            <button @click="setupColumnModal(col)" class="text-center text-black px-0.5 tex-sm"><img src="../assets/edit.png" width="12" height="12"></button>
           </div>
         </th>
         <th scope="col" class="thdata font-semibold">
