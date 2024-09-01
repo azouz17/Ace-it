@@ -41,13 +41,14 @@ async function SendPrompt(e){
     axios
     .request(options)
     .then((response) => {
+        console.log(response)
         reply.value = response.data.cohere.generated_text
     })
     .catch((error) => {
         console.error(error);
     });
     prompt.value=''
-    timeout = setTimeout(AddText,5000,)
+    timeout = setTimeout(AddText,10000)
 }
 
 function scrollToBottom() {
@@ -57,7 +58,6 @@ function scrollToBottom() {
 function AddText(){
     loading.value = false
     chat.value.push(reply.value)
-    console.log(ChatStore.getChat)
 
 }
 

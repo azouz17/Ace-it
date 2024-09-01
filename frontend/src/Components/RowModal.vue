@@ -74,9 +74,9 @@ async function ModifyRow(){
             ✕
           </button>
               <div class="flex flex-col items-start">
-                <div class="flex flex-row mt-4" v-for="(col,index) in columns">
+                <div class="flex flex-row mt-4 w-1/2 justify-between" v-for="(col,index) in columns">
                     <label class="font-bold">{{ col.text }} </label>
-                    <input type="email"  v-model="new_row[index]" class="ml-2 border border-black rounded p-0.5 flex" :id="col.text" >
+                    <input type="email" v-model="new_row[index]" class="ml-2 border border-black rounded p-0.5 flex " :id="col.text" >
                 </div>
               </div>
       
