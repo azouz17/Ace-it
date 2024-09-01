@@ -4,7 +4,7 @@ import RowModal from '../Components/RowModal.vue'
 import ColumnModal from '../Components/ColumnModal.vue'
 import { ref, onMounted } from 'vue'
 import Cookies from 'js-cookie';
-import { useUserStore } from "../stores/userStore";
+import { useUserStore } from "../Stores/userStore";
 import { RouterView,useRouter, useRoute } from 'vue-router'
 import { CheckLogin } from '../authentication';
 

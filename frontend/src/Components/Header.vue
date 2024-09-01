@@ -1,8 +1,8 @@
 <script setup>
 import router from '../router';
-import { useUserStore } from "../Stores/userStore";
-import { useChatStore } from '../stores/ChatStore';
-import { useExpertStore } from '../Stores/ExpertStore'
+import { useUserStore } from "../Stores/userStore.js";
+import { useChatStore } from '../Stores/ChatStore.js';
+import { useExpertStore } from '../Stores/ExpertStore.js'
 import { logout } from '../authentication.js'
 import Cookies from 'js-cookie';
 
