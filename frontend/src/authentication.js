@@ -2,9 +2,9 @@ import Cookies from 'js-cookie';
 import { RouterView,useRouter, useRoute } from 'vue-router'
 import router from './router'
 import { useUserStore } from "./Stores/userStore";
-import { useChatStore } from './stores/ChatStore';
+import { useChatStore } from './Stores/ChatStore';
 import { useExpertStore } from './Stores/ExpertStore'
-import {useAuthStore} from './stores/authStore'
+import {useAuthStore} from './Stores/authStore'
 
 
 export async function logout (message){

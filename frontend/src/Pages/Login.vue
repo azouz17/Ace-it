@@ -2,8 +2,8 @@
 import { RouterView,useRouter, useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import Cookies from 'js-cookie';
-import { useUserStore } from "../Stores/userStore";
-import { useAuthStore } from '../stores/authStore';
+import { useUserStore } from "../Stores/userStore.js";
+import { useAuthStore } from '../Stores/authStore.js';
 import { logout } from '../authentication.js'
 
 const username = ref('')

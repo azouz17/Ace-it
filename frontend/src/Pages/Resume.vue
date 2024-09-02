@@ -4,7 +4,7 @@ import Header from '../Components/Header.vue'
 import { ref as ref,onMounted, nextTick } from 'vue'
 import Cookies from 'js-cookie';
 import axios from "axios";
-import { useChatStore } from '../stores/ChatStore'
+import { useChatStore } from '../Stores/ChatStore'
 import { CheckLogin } from '../authentication';
 
 const ChatStore = useChatStore()
