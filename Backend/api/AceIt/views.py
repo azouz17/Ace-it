@@ -10,7 +10,12 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect, render
 from django.conf import settings
+from django.views.decorators.csrf import ensure_csrf_cookie
 
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    print('inside get_csrf')
+    return JsonResponse({"detail": "CSRF cookie set"})
 
 
 def login(request):

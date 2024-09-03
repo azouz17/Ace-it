@@ -1,9 +1,18 @@
 <script setup>
-import ApplicationTable from './Components/ApplicationTable.vue';
-import Sidebar from './Components/Sidebar.vue';
-import Header from './Components/Header.vue';
-import Login from './Pages/Login.vue'
-import Footer from '../src/Components/Footer.vue'
+import { onMounted, ref } from 'vue'
+
+onMounted( async()=>{  
+  const response = await fetch('http://127.0.0.1:8000/get-csrf-token', {
+        method: 'GET',
+        credentials: 'include'  // This ensures cookies are sent with the request
+    });
+    console.log
+    if (response.ok) {
+        console.log("CSRF token set successfully.");
+    } else {
+        console.log("Failed to set CSRF token.");
+    }    
+})
 </script>
 <template>
   <router-view />

@@ -20,5 +20,5 @@ urlpatterns = [
     path('sendemail', views.sendemail, name='sendemail'),
     path('getFields', views.getFields,name='getFields'),
     path('createExpert', views.createExpert,name='createExpert'),
-    
+    path('get-csrf-token', views.get_csrf_token,name='get-csrf-token'),
 ]
